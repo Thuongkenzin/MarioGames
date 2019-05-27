@@ -12,7 +12,7 @@ public class MarioBros extends Game {
 	public SpriteBatch batch;
 	public static final int V_WIDTH = 356;
 	public static final int V_HEIGHT = 200;
-	public static final float PIXEL_PER_METER = 100f;
+	public static final float PIXEL_PER_METER = 100;
 	
 	@Override
 	public void create () {

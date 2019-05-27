@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -24,6 +25,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.MarioBros;
 import com.mygdx.game.Scenes.Hud;
 import com.mygdx.game.Sprites.Mario;
+import com.mygdx.game.Tools.B2WorldCreator;
 
 public class PlayScreen implements Screen {
     private MarioBros game;
@@ -34,11 +36,13 @@ public class PlayScreen implements Screen {
     private OrthogonalTiledMapRenderer orthogonalTiledMapRenderer;
     private Mario player;
 
+    private TextureAtlas atlas;
     private World world;
     private Box2DDebugRenderer box2DDebugRenderer;
     public PlayScreen(MarioBros game){
         this.game = game;
 
+        atlas = new TextureAtlas("Mario_and_Enemies.pack");
         orthographicCamera = new OrthographicCamera();
         gamePort = new FitViewport(MarioBros.V_WIDTH/MarioBros.PIXEL_PER_METER,MarioBros.V_HEIGHT/MarioBros.PIXEL_PER_METER,orthographicCamera);
 
@@ -49,77 +53,16 @@ public class PlayScreen implements Screen {
         orthographicCamera.position.set(gamePort.getWorldWidth()/2,gamePort.getWorldHeight()/2,0);
         world = new World(new Vector2(0,-10),true);
         box2DDebugRenderer = new Box2DDebugRenderer();
+
         //create Mario character
-        player = new Mario(world);
+        player = new Mario(world, this);
 
-        BodyDef bodyDef = new BodyDef();
-        PolygonShape shape = new PolygonShape();
-        FixtureDef fixtureDef = new FixtureDef();
-        Body body;
+        new B2WorldCreator(world,tiledMap);
 
-        //create ground body
-        for(MapObject object : tiledMap.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)){
-            Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
-            bodyDef.type = BodyDef.BodyType.StaticBody;
-            bodyDef.position.set((rect.getX() + rect.getWidth()/2)/MarioBros.PIXEL_PER_METER, (rect.getY() + rect.getHeight()/2)/MarioBros.PIXEL_PER_METER);
-
-            body = world.createBody(bodyDef);
-
-            shape.setAsBox(rect.getWidth()/2/MarioBros.PIXEL_PER_METER,rect.getHeight()/2/MarioBros.PIXEL_PER_METER );
-
-            fixtureDef.shape = shape;
-            body.createFixture(fixtureDef);
-
-        }
-
-        // create pipes bodies fixture
-
-        for(MapObject object : tiledMap.getLayers().get(3).getObjects().getByType(RectangleMapObject.class)){
-            Rectangle rect = ((RectangleMapObject) object).getRectangle();
-
-            bodyDef.type = BodyDef.BodyType.StaticBody;
-            bodyDef.position.set((rect.getX() + rect.getWidth()/2)/MarioBros.PIXEL_PER_METER, (rect.getY() + rect.getHeight()/2)/MarioBros.PIXEL_PER_METER);
-
-            body = world.createBody(bodyDef);
-
-            shape.setAsBox(rect.getWidth()/2/MarioBros.PIXEL_PER_METER,rect.getHeight()/2/MarioBros.PIXEL_PER_METER );
-
-            fixtureDef.shape = shape;
-            body.createFixture(fixtureDef);
-
-        }
-
-        // create brick
-
-        for(MapObject object : tiledMap.getLayers().get(5).getObjects().getByType(RectangleMapObject.class)){
-            Rectangle rect = ((RectangleMapObject) object).getRectangle();
-
-            bodyDef.type = BodyDef.BodyType.StaticBody;
-            bodyDef.position.set((rect.getX() + rect.getWidth()/2)/MarioBros.PIXEL_PER_METER, (rect.getY() + rect.getHeight()/2)/MarioBros.PIXEL_PER_METER);
-
-            body = world.createBody(bodyDef);
-
-            shape.setAsBox(rect.getWidth()/2/MarioBros.PIXEL_PER_METER,rect.getHeight()/2/MarioBros.PIXEL_PER_METER );
-
-            fixtureDef.shape = shape;
-            body.createFixture(fixtureDef);
-        }
-        // create coin bodies
-        for(MapObject object : tiledMap.getLayers().get(4).getObjects().getByType(RectangleMapObject.class)){
-            Rectangle rect = ((RectangleMapObject) object).getRectangle();
-
-            bodyDef.type = BodyDef.BodyType.StaticBody;
-            bodyDef.position.set((rect.getX() + rect.getWidth()/2)/MarioBros.PIXEL_PER_METER, (rect.getY() + rect.getHeight()/2)/MarioBros.PIXEL_PER_METER);
-
-            body = world.createBody(bodyDef);
-
-            shape.setAsBox(rect.getWidth()/2/MarioBros.PIXEL_PER_METER,rect.getHeight()/2/MarioBros.PIXEL_PER_METER );
-
-            fixtureDef.shape = shape;
-            body.createFixture(fixtureDef);
-
-        }
+    }
+    public TextureAtlas getAtlas(){
+        return atlas;
     }
     @Override
     public void show() {
@@ -137,6 +80,7 @@ public class PlayScreen implements Screen {
     public void update(float dt){
         handleInput(dt);
         // add fps game
+        player.update(dt);
         world.step(1/60f,6,2);
         orthographicCamera.position.x = player.b2body.getPosition().x;
         orthographicCamera.update();
@@ -153,6 +97,10 @@ public class PlayScreen implements Screen {
         //render our Box2DDebugLines
         box2DDebugRenderer.render(world,orthographicCamera.combined);
 
+        game.batch.setProjectionMatrix(orthographicCamera.combined);
+        game.batch.begin();
+        player.draw(game.batch);
+        game.batch.end();
         //set our batch to now draw what the Hud camera sees
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
@@ -182,6 +130,10 @@ public class PlayScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        world.dispose();
+        box2DDebugRenderer.dispose();
+        tiledMap.dispose();
+        orthogonalTiledMapRenderer.dispose();
+        hud.dispose();
     }
 }
