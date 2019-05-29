@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:orientation="horizontal">
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_weight="0">
+    <Button
+        android:id="@+id/btnBlockTest"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_weight="0"
+        android:text="Activity Test" />
+    <Button
+        android:id="@+id/btnCustomTest"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_weight="0"
+        android:text="Custom Block Test" />
+
+
+    <Button
+        android:id="@+id/btnCharacterTest"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_weight="0"
+        android:text="Character Test" />
+</LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="0">
+        <Button
+            android:id="@+id/btnlv1"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_weight="0"
+            android:text="Level 1" />
+
+        <Button
+            android:id="@+id/btnlv2"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_weight="0"
+            android:text="Level 2" />
+
+        <Button
+            android:id="@+id/btnlv3"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_weight="0"
+            android:text="Level 3" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="0">
+
+        <Button
+            android:id="@+id/btnlv4"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_weight="0"
+            android:text="Level 4" />
+
+        <Button
+            android:id="@+id/btnlv6"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_weight="0"
+            android:text="Level 6" />
+
+        <Button
+            android:id="@+id/btnlv5"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_weight="0"
+            android:text="Level 5" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="0">
+
+        <Button
+            android:id="@+id/btnlv7"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_weight="0"
+            android:text="Level 7" />
+
+        <Button
+            android:id="@+id/btnlv8"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_weight="0"
+            android:text="Level 8" />
+
+        <Button
+            android:id="@+id/btnlv9"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_weight="0"
+            android:text="Level 9" />
+    </LinearLayout>
+
+
+
+
+</LinearLayout>

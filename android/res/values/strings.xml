@@ -2,5 +2,5 @@
 <resources>
 
     <string name="app_name">MarioGame</string>
-
+    <string name="title_message">Learning code through games</string>
 </resources>
