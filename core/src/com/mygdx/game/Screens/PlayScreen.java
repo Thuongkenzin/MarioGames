@@ -24,6 +24,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.MarioBros;
 import com.mygdx.game.Scenes.Hud;
+import com.mygdx.game.Sprites.Dinosaur;
 import com.mygdx.game.Sprites.Mario;
 import com.mygdx.game.Tools.B2WorldCreator;
 
@@ -35,7 +36,7 @@ public class PlayScreen implements Screen {
     private TiledMap tiledMap;
     private OrthogonalTiledMapRenderer orthogonalTiledMapRenderer;
     private Mario player;
-
+    private Dinosaur dinosaur;
     private TextureAtlas atlas;
     private World world;
     private Box2DDebugRenderer box2DDebugRenderer;
@@ -53,7 +54,7 @@ public class PlayScreen implements Screen {
         orthographicCamera.position.set(gamePort.getWorldWidth()/2,gamePort.getWorldHeight()/2,0);
         world = new World(new Vector2(0,-10),true);
         box2DDebugRenderer = new Box2DDebugRenderer();
-
+       dinosaur = new Dinosaur(world);
         //create Mario character
         player = new Mario(world, this);
 
@@ -81,6 +82,7 @@ public class PlayScreen implements Screen {
         handleInput(dt);
         // add fps game
         player.update(dt);
+        dinosaur.update(dt);
         world.step(1/60f,6,2);
         orthographicCamera.position.x = player.b2body.getPosition().x;
         orthographicCamera.update();
@@ -100,6 +102,7 @@ public class PlayScreen implements Screen {
         game.batch.setProjectionMatrix(orthographicCamera.combined);
         game.batch.begin();
         player.draw(game.batch);
+        dinosaur.draw(game.batch);
         game.batch.end();
         //set our batch to now draw what the Hud camera sees
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
