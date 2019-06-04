@@ -1,4 +1,4 @@
-package com.mygdx.game;
+package com.mygdx.game.Block;
 
 public abstract class BlockCommand {
     protected String name;

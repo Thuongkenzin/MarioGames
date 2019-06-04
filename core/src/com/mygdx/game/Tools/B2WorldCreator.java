@@ -17,7 +17,6 @@ public class B2WorldCreator {
 
 
     public B2WorldCreator(World world, TiledMap tiledMap){
-
         BodyDef bodyDef = new BodyDef();
         PolygonShape shape = new PolygonShape();
         FixtureDef fixtureDef = new FixtureDef();
@@ -55,9 +54,7 @@ public class B2WorldCreator {
             body.createFixture(fixtureDef);
 
         }
-
         // create brick
-
         for(MapObject object : tiledMap.getLayers().get(5).getObjects().getByType(RectangleMapObject.class)){
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
             new Brick(world,tiledMap,rect);
@@ -65,9 +62,7 @@ public class B2WorldCreator {
         // create coin bodies
         for(MapObject object : tiledMap.getLayers().get(4).getObjects().getByType(RectangleMapObject.class)){
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
-
             new Coin(world, tiledMap, rect);
-
         }
     }
 }

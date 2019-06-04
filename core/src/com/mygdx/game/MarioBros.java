@@ -8,12 +8,15 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.mygdx.game.Block.BlockCommand;
 import com.mygdx.game.Screens.PlayScreen;
+
+import java.util.ArrayList;
 
 public class MarioBros extends Game {
 	public SpriteBatch batch;
-	public static final int V_WIDTH = 356;
-	public static final int V_HEIGHT = 200;
+	public static final int V_WIDTH = 960; //356
+	public static final int V_HEIGHT = 640; //200
 	public static final float PIXEL_PER_METER = 100;
 
 	float stateTime;
@@ -31,5 +34,15 @@ public class MarioBros extends Game {
 	@Override
 	public void dispose () {
 		batch.dispose();
+	}
+	public static boolean codeGet = false;
+	public static boolean firstRunCode = false;
+	public static int codeCount = -1;
+	public static ArrayList<BlockCommand> blockList;
+	public static void setCodeGenerate(ArrayList<BlockCommand> blockCommands) {
+		blockList = blockCommands;
+		codeGet = true;
+		codeCount = blockList.size();
+		firstRunCode = true;
 	}
 }

@@ -1,9 +1,9 @@
-package com.mygdx.game;
+package com.mygdx.game.Block;
 
 import java.util.ArrayList;
 
 public class MultipleBlock extends BlockCommand {
-    private ArrayList<BlockCommand> blockList = new ArrayList<>();
+    private ArrayList<BlockCommand> blockList = new ArrayList<BlockCommand>();
     private int times;
     private int curBlock;
     private int curTime;

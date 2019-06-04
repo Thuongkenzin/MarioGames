@@ -22,6 +22,8 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.game.Block.MultipleBlock;
+import com.mygdx.game.Block.SingleBlock;
 import com.mygdx.game.MarioBros;
 import com.mygdx.game.Scenes.Hud;
 import com.mygdx.game.Sprites.Dinosaur;
@@ -49,7 +51,8 @@ public class PlayScreen implements Screen {
 
         hud = new Hud(game.batch);
 
-        tiledMap = new TmxMapLoader().load("level1.tmx");
+        //tiledMap = new TmxMapLoader().load("level1.tmx");
+        tiledMap = new TmxMapLoader().load("MapGame/Map2.tmx");
         orthogonalTiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 1/MarioBros.PIXEL_PER_METER);
         orthographicCamera.position.set(gamePort.getWorldWidth()/2,gamePort.getWorldHeight()/2,0);
         world = new World(new Vector2(0,-10),true);
@@ -58,7 +61,28 @@ public class PlayScreen implements Screen {
         //create Mario character
         player = new Mario(world, this);
 
-        new B2WorldCreator(world,tiledMap);
+        //new B2WorldCreator(world,tiledMap);
+        BodyDef bodyDef = new BodyDef();
+        PolygonShape shape = new PolygonShape();
+        FixtureDef fixtureDef = new FixtureDef();
+        Body body;
+
+        //create ground body
+        for(MapObject object : tiledMap.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)){
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+
+            bodyDef.type = BodyDef.BodyType.StaticBody;
+            bodyDef.position.set((rect.getX() + rect.getWidth()/2)/ MarioBros.PIXEL_PER_METER, (rect.getY() + rect.getHeight()/2)/MarioBros.PIXEL_PER_METER);
+
+            body = world.createBody(bodyDef);
+
+            shape.setAsBox(rect.getWidth()/2/MarioBros.PIXEL_PER_METER,rect.getHeight()/2/MarioBros.PIXEL_PER_METER );
+
+            fixtureDef.shape = shape;
+            body.createFixture(fixtureDef);
+
+        }
+
 
 
     }
@@ -70,21 +94,85 @@ public class PlayScreen implements Screen {
 
     }
 
+    public void moveStep(int step){
+
+        for(int k =0;k<step;k++ ) {
+            // moi buoc thi can 1 vong lap 22 lan
+            for (int i = 0; i < 22; i++) {
+                //kiem tra gia tri velocity neu chay nhanh qua thi khong tang len nua
+                if (dinosaur.b2body.getLinearVelocity().x <= 2.5)
+                    dinosaur.b2body.applyLinearImpulse(new Vector2(0.1f, 0), dinosaur.b2body.getWorldCenter(), true);
+                    //dinosaur.b2body.applyForce(new Vector2(1.5f, 0), dinosaur.b2body.getWorldCenter(), true);
+            }
+            //xet velocity ve khong nhung khong chay duoc
+            dinosaur.b2body.setLinearVelocity(0.1f, dinosaur.b2body.getLinearVelocity().y);
+//        for(int j= 0;j< step;j++) {
+//
+//            dinosaur.b2body.setLinearVelocity(1, 0);
+//            for (int i = 0; i < 15; i++) {
+//                if (dinosaur.b2body.getLinearVelocity().x <= 2) {
+//                    dinosaur.b2body.applyLinearImpulse(new Vector2(0.1f, 0), dinosaur.b2body.getWorldCenter(), true);
+//
+//                }
+//                dinosaur.b2body.setLinearVelocity(0, 0);
+//            }
+//        }
+        }
+
+    }
+    protected void checkSingleBlock(SingleBlock singleBlock) {
+        if (MarioBros.codeGet) {
+            int step = singleBlock.getStep();
+            switch (singleBlock.getName()) {
+                case "aHead":
+                    moveStep(step);
+                    moveStep(step);
+                    moveStep(step);
+                    moveStep(step);
+
+                    break;
+                case "Back":
+                    player.b2body.applyLinearImpulse(new Vector2(-0.5f,0),player.b2body.getWorldCenter(),true);
+                    break;
+                case "Left":
+                    break;
+                case "Right":
+                    break;
+            }
+            MarioBros.codeGet = false;
+        }
+    }
     public void handleInput(float dt){
-       if(Gdx.input.isKeyJustPressed(Input.Keys.UP))
-           player.b2body.applyLinearImpulse(new Vector2(0,4f),player.b2body.getWorldCenter(),true);
+//        if(MarioBros.blockList !=null) {
+//            player.b2body.applyLinearImpulse(new Vector2(0, 4f), player.b2body.getWorldCenter(), true);
+//        }
+        if (MarioBros.blockList != null && MarioBros.codeCount != 0) {
+            String s = MarioBros.blockList.get(MarioBros.blockList.size() - MarioBros.codeCount).getClass().getSimpleName();
+            switch (s) {
+                case "SingleBlock":
+                    checkSingleBlock((SingleBlock) MarioBros.blockList.get(MarioBros.blockList.size() - MarioBros.codeCount));
+                    break;
+                case "MultipleBlock":
+                    //checkMultipleBlock((MultipleBlock) MarioBros.blockList.get(MarioBros.blockList.size() - MarioBros.codeCount));
+                    break;
+            }
+        }
        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.b2body.getLinearVelocity().x<=2)
-           player.b2body.applyLinearImpulse(new Vector2(0.1f,0),player.b2body.getWorldCenter(),true);
+           //player.b2body.applyLinearImpulse(new Vector2(0.1f,0),player.b2body.getWorldCenter(),true);
+           dinosaur.b2body.applyLinearImpulse(new Vector2(0.1f, 0), dinosaur.b2body.getWorldCenter(), true);
+
         if(Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.b2body.getLinearVelocity().x>= -2)
             player.b2body.applyLinearImpulse(new Vector2(-0.1f,0),player.b2body.getWorldCenter(),true);
     }
+
     public void update(float dt){
-        handleInput(dt);
+
         // add fps game
-        player.update(dt);
+       // player.update(dt);
         dinosaur.update(dt);
         world.step(1/60f,6,2);
-        orthographicCamera.position.x = player.b2body.getPosition().x;
+        handleInput(dt);
+        //orthographicCamera.position.x = player.b2body.getPosition().x;
         orthographicCamera.update();
         orthogonalTiledMapRenderer.setView(orthographicCamera);
     }

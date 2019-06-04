@@ -48,7 +48,7 @@ public class Mario extends Sprite {
         marioJump = new Animation(0.1f,frames);
         defineMario();
         marioStand = new TextureRegion(getTexture(),1,11,16,16);
-        setBounds(0,0,16/MarioBros.PIXEL_PER_METER,16/MarioBros.PIXEL_PER_METER);
+        setBounds(0,0,50/MarioBros.PIXEL_PER_METER,50/MarioBros.PIXEL_PER_METER);
         setRegion(marioStand);
     }
 
@@ -58,21 +58,21 @@ public class Mario extends Sprite {
     }
 
     private TextureRegion getFrame(float dt) {
-        currentState = getState();
-        TextureRegion region;
-        switch (currentState){
-            case JUMPING:
-               region = (TextureRegion) marioJump.getKeyFrame(stateTimer);
-               break;
-            case RUNNING:
-                region = (TextureRegion) marioRun.getKeyFrame(stateTimer,true);
-                break;
-            case FALLING:
-            case STANDING:
+            currentState = getState();
+            TextureRegion region;
+            switch (currentState){
+                case JUMPING:
+                    region = (TextureRegion) marioJump.getKeyFrame(stateTimer);
+                    break;
+                case RUNNING:
+                    region = (TextureRegion) marioRun.getKeyFrame(stateTimer,true);
+                    break;
+                case FALLING:
+                case STANDING:
                 default:
                     region = marioStand;
                     break;
-        }
+            }
 
         if((b2body.getLinearVelocity().x<0||!runningRight) && !region.isFlipX()){
             region.flip(true, false);
@@ -100,13 +100,13 @@ public class Mario extends Sprite {
 
     private void defineMario() {
         BodyDef bodyDef = new BodyDef();
-        bodyDef.position.set(32/ MarioBros.PIXEL_PER_METER,32/MarioBros.PIXEL_PER_METER);
+        bodyDef.position.set(1000/ MarioBros.PIXEL_PER_METER,200/MarioBros.PIXEL_PER_METER);
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bodyDef);
 
         FixtureDef fixtureDef = new FixtureDef();
         CircleShape circleShape= new CircleShape();
-        circleShape.setRadius(6/MarioBros.PIXEL_PER_METER);
+        circleShape.setRadius(20/MarioBros.PIXEL_PER_METER);
         fixtureDef.shape = circleShape;
         b2body.createFixture(fixtureDef);
     }
