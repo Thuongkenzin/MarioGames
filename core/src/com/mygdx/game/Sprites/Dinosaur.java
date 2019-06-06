@@ -50,7 +50,7 @@ public class Dinosaur extends Sprite {
     }
 
     public void update(float dt){
-        setPosition(b2body.getPosition().x - getWidth()/2,b2body.getPosition().y-getHeight()/2);
+        setPosition(b2body.getPosition().x - getWidth()/2 + 20/MarioBros.PIXEL_PER_METER,b2body.getPosition().y-getHeight()/2 + 15/MarioBros.PIXEL_PER_METER);
         setRegion(getFrame(dt));
     }
 
@@ -86,7 +86,7 @@ public class Dinosaur extends Sprite {
 
     public void defineDinosaur(){
         BodyDef bodyDef = new BodyDef();
-        bodyDef.position.set(400/ MarioBros.PIXEL_PER_METER,300/MarioBros.PIXEL_PER_METER);
+        bodyDef.position.set(100/ MarioBros.PIXEL_PER_METER,100/MarioBros.PIXEL_PER_METER);
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bodyDef);
 
